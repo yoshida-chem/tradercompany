@@ -1,0 +1,2 @@
+# tradercompany
+trader-company method
