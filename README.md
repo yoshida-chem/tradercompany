@@ -1,6 +1,6 @@
 # **tradercompany method**
 
-trader-company methodを使いやすい形で実装しました。  
+trader-company methodを実装しました。  
 より論文実装に近い形で実装していますが、大枠は以下のqiita記事を参考にしました。
 
 ## 参考文献
