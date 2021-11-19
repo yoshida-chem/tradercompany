@@ -10,10 +10,6 @@ class Trader():
         self.binary_operators = binary_operators
         # if time_window==None, train by using all data
         self.time_window = time_window
-
-        # GMMのための辞書
-        self.dict_activation = dict(zip(activation_funcs, range(len(activation_funcs))))
-        self.dict_binary = dict(zip(binary_operators, range(len(binary_operators))))
         
         # initialize by stock
         self.num_factors = [np.nan for _ in range(num_stock)]
@@ -41,40 +37,7 @@ class Trader():
         
             self.X_factors[i_stock] = np.zeros((0, self.num_factors[i_stock]))
             self.cumulative_error[i_stock] = 0.0
-
-    def set_params(self, i_stock, list_params):
-        self.num_factors[i_stock] = list_params[0]["num_factor"]
-
-        self.delay_P[i_stock] = [list_params[factor+1]["delay_P"] for factor in range(self.num_factors[i_stock])]
-        self.delay_Q[i_stock] = [list_params[factor+1]["delay_Q"] for factor in range(self.num_factors[i_stock])]
-        self.stock_P[i_stock] = [list_params[factor+1]["stock_P"] for factor in range(self.num_factors[i_stock])]
-        self.stock_Q[i_stock] = [list_params[factor+1]["stock_Q"] for factor in range(self.num_factors[i_stock])]
-        self.activation_func[i_stock] = [self.activation_funcs[list_params[factor+1]["activation_func"]] for factor in range(self.num_factors[i_stock])]
-        self.binary_operator[i_stock] = [self.binary_operators[list_params[factor+1]["binary_operator"]] for factor in range(self.num_factors[i_stock])]
         
-        self.w[i_stock] = np.random.randn(self.num_factors[i_stock])
-
-        self.X_factors[i_stock] = np.zeros((0, self.num_factors[i_stock]))
-        self.cumulative_error[i_stock] = 0.0
-
-    def get_params(self, i_stock):
-        list_params = []
-        num_factor = self.num_factors[i_stock]
-        list_params.append({"num_factor": num_factor})
-        
-        for factor in range(num_factor):
-            dict_ = {}
-            dict_["delay_P"] = self.delay_P[i_stock][factor]
-            dict_["delay_Q"] = self.delay_Q[i_stock][factor]
-            dict_["stock_P"] = self.stock_P[i_stock][factor]
-            dict_["stock_Q"] = self.stock_Q[i_stock][factor]
-            dict_["activation_func"] = self.dict_activation[self.activation_func[i_stock][factor]]
-            dict_["binary_operator"] = self.dict_binary[self.binary_operator[i_stock][factor]]
-            
-            list_params.append(dict_)
-
-        return list_params
-
     def reset_params(self, i_stock):
         # initialized by uniform distribution
         self.num_factors[i_stock] = np.random.choice(range(1, self.num_factors_max+1))
@@ -88,7 +51,7 @@ class Trader():
 
         self.X_factors[i_stock] = np.zeros((0, self.num_factors[i_stock]))
         self.cumulative_error[i_stock] = 0.0
-
+    
     def calc_factor(self, data, i_stock, j):
         """ i_stock番目の株に関してj番目の項を計算
         """
